@@ -120,7 +120,7 @@ def convert_image(input: str) -> None:
     # Import metadata
     import_meta(output, exif_backup_path)
     # Set the exif title to current file name
-    add_title(output)
+    add_title(input)
     # Delete metadata extraction file
     delete(exif_backup_path)
 
