@@ -1,14 +1,20 @@
-# Convert-and-Replace-to-JPEG-XL
+# Convert-and-Replace-to-JPEG-XL 🦭
 This script identifies suitable images for JPEG XL conversion, preserving original metadata. 
 It adds the original filename as a title tag to the image's EXIF data.
+
+# Important! 🫵👁️👄👁️
+This script will **delete** the old image files after conversion. It will also **overwrite** previous exif title tags.
 
 # Usage
 ```
 python <complete path to this main.py> <complete path to a directory containing images>
 ```
 
-# Important!
-This script will delete the old image files after conversion. It will also overwrite previous exif title tags.
+# JPEG XL Settings
+These settings are used for conversion:
+```
+--distance 0 --effort 10 --lossless_jpeg 1 --allow_jpeg_reconstruction 0
+```
 
 # Requirements
 - Python 3.X
