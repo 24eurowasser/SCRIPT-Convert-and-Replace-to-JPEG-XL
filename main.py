@@ -1,5 +1,6 @@
 import os
 import shutil
+import subprocess
 import sys
 
 def path_check(path: str) -> None:
@@ -112,57 +113,32 @@ def convert_image(input: str) -> None:
     # Variables
     extension_jxl:    str = ".jxl"
     output:           str = input + extension_jxl
-    exif_backup_path: str # 🦆 To be filled
 
-    # Export metadata, because it would get lost during conversion
-    exif_backup_path = export_meta(input)
-    # Convert image to jpegxl
+    # Convert image to JPEG XL
     convert_to_jpegxl(input, output)
-    # Import metadata
-    import_meta(output, exif_backup_path)
+    # Transfer metadata after conversion
+    transfer_metadata(input, output)
     # Set the exif title to current file name
     add_title(input)
-    # Delete metadata extraction file
-    delete(exif_backup_path)
 
-def export_meta(input: str) -> str:
-    """
-    Export possible EXIF information from the input.
-    :param input: A path leading to an exif-extractable file.
-    :return: Path to the exported exif file.
+def transfer_metadata(input: str, output: str) -> None:
+    """ # TODO
+    Transfer every image metadata from input to output.
+    :param input: A path leading to an metadata-extractable file.
+    :param output: A path leading to an file that can receive metadata.
+    :return: None
     """
     # Variables
     command:                 str # 🦆 To be filled
     safe_input:              str # 🦆 To be filled
     safe_output:             str # 🦆 To be filled
-    output_extension:        str = ".xmp"
-    output:                  str = input + output_extension
 
     # Make paths safe to use for console use (spaces in paths can create problems)
     safe_input  = quote_string(input)
     safe_output = quote_string(output)
     # Create console command
-    command = "exiftool -o " + safe_output + " -tagsfromfile " + safe_input
-
-    os.system(command)
-
-    return output
-
-def import_meta(image: str, metadata: str) -> None:
-    """
-    Imports EXIF tags to an image.
-    :param image: A path leading to an image.
-    :param metadata: A path leading to metadata.
-    :return: None
-    """
-    # Variables
-    command:       str # 🦆 To be filled
-    safe_image:    str = quote_string(image)
-    safe_metadata: str = quote_string(metadata)
-
-    command = "exiftool -overwrite_original -m -tagsfromfile " + safe_metadata + " " + safe_image
-
-    os.system(command)
+    command = "exiftool -overwrite_original -m -TagsFromFile " + safe_input + " \"-all:all>all:all\" " + safe_output
+    subprocess.run(command)
 
 def add_title(input: str) -> None:
     """
@@ -174,8 +150,7 @@ def add_title(input: str) -> None:
     safe_input: str = quote_string(input)
     title:      str = os.path.basename(input)
     command:    str = "exiftool -overwrite_original -m -Title=" + title + " " + safe_input
-
-    os.system(command)
+    subprocess.run(command)
 
 def convert_to_jpegxl(input: str, output: str) -> None:
     """
@@ -186,12 +161,11 @@ def convert_to_jpegxl(input: str, output: str) -> None:
     """
     # Variables
     # Make paths safe to use for console use (spaces in paths can create problems)
-    safe_input:  str = quote_string(input)
+    safe_input: str = quote_string(input)
     safe_output: str = quote_string(output)
-    settings:    str = "--distance 0 --effort 10 --lossless_jpeg 1 --allow_jpeg_reconstruction 0"
-    command:     str = "cjxl " + safe_input + " " + safe_output + " " + settings
-
-    os.system(command)
+    settings: str = "--distance 0 --effort 10 --lossless_jpeg 1 --allow_jpeg_reconstruction 0"
+    command: str = "cjxl " + safe_input + " " + safe_output + " " + settings
+    subprocess.run(command)
 
 def delete(file: str):
     """
@@ -221,7 +195,7 @@ def main() -> None:
 
     files:                     list[str] = [] # 🦆 To be filled
     image_files:               list[str] = [] # 🦆 To be filled
-    supported_file_extensions: list[str] = ["exr", "gif", "jpg", "jpeg", "pam", "pgm", "ppm", "pfm", "pgx", "png", "apng"]
+    supported_file_extensions: list[str] = ["jpg", "jpeg", "png", "gif", "apng", "exr", "pam", "pgm", "ppm", "pfm", "pgx"]
 
     # Get the path from the second position of command line arguments
     argument_path = get_path(sys.argv)
