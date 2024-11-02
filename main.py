@@ -213,14 +213,14 @@ def main() -> None:
     number_of_image_files:     int       # 🦆 To be filled
     current_progress:          int = 1
 
+    size_difference_mb:        float     # 🦆 To be filled
+
     files:                     list[str] # 🦆 To be filled
     image_files:               list[str] # 🦆 To be filled
     supported_file_extensions: list[str] = ["exr", "gif", "jpg", "jpeg", "pam", "pgm", "ppm", "pfm", "pgx", "png", "apng", "jxl"]
 
     # Get the path from the second position of command line arguments
     argument_path = get_path(sys.argv)
-    # Get the byte size of the given path
-    size_before = get_size(argument_path)
     # Scan every file path from the given path
     files = scan_for_files(argument_path)
     # Get the number of files in the given path
@@ -229,30 +229,34 @@ def main() -> None:
     image_files = find_files_with_extension(files, supported_file_extensions)
     # Get the number of image files in the given path
     number_of_image_files = len(image_files)
+    # Get the byte size of images before conversion
+    size_before = get_size(argument_path)
     # Let the user know the current status
     print("💡 Given path: " + argument_path)
     print("💡 Path contains this number of total files: " + str(number_of_files))
     print("💡 Path contains this number of image files: " + str(number_of_image_files))
-    print("💡 The total byte size of the given path is " + str(size_before) + " bytes.")
 
     # Convert the images now
     for file in image_files:
-        print("💡 Convert image " + str(current_progress) + "/" + str(number_of_image_files))
+        print("💡 Convert image " + str(current_progress) + "/" + str(number_of_image_files) + " 🐸")
         convert_image(file)
         # Delete old image after conversion, only if JPEG XL file exist
         if os.path.exists(file + ".jxl"):
             delete(file)
-        print("✔️ Conversion done.")
+        print("✔️ Conversion done. 🐬")
         # Update progress
         current_progress = current_progress + 1
 
     # Get size after conversion
     size_after = get_size(argument_path)
     # End status report
-    print("💡 Given path: " + argument_path)
-    print("💡 Byte size after operation: " + str(size_after))
-    print("💡 Before / After: " + str(size_before) + " / " + str(size_after))
-    print("✔️ Script done.")
+    print("💡 Size information:")
+    print("Directory size in bytes before conversion: " + str(size_before))
+    print("Directory size in bytes after conversion: " + str(size_after))
+    print("Difference between before and after: " + str(size_before - size_after))
+    size_difference_mb = (size_before - size_after) / (1024 * 1024)
+    print("Difference displayed in megabyte unit: " + str(size_difference_mb) + " MB 🦆")
+    print("✔️ Script done! 🦭🐳")
 
 # 🐸 Start the script 🦭
 main()
