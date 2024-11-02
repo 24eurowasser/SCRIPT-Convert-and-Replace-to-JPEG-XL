@@ -239,8 +239,9 @@ def main() -> None:
     for file in image_files:
         print("💡 Convert image " + str(current_progress) + "/" + str(number_of_image_files))
         convert_image(file)
-        # Delete old image after conversion
-        delete(file)
+        # Delete old image after conversion, only if JPEG XL file exist
+        if os.path.exists(file + ".jxl"):
+            delete(file)
         print("✔️ Conversion done.")
         # Update progress
         current_progress = current_progress + 1
