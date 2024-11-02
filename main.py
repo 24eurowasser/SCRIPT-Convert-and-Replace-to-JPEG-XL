@@ -171,7 +171,7 @@ def add_title(input: str) -> None:
     """
     # Variables
     safe_input: str = quote_string(input)
-    title:      str = os.path.basename(os.path.splitext(input)[0])
+    title:      str = os.path.basename(input)
     command:    str = "exiftool -overwrite_original -m -Title=" + title + " " + safe_input
 
     os.system(command)
