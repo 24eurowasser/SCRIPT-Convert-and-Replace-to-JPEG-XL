@@ -249,7 +249,7 @@ def main() -> None:
     size_after = get_size(argument_path)
     # End status report
     print("💡 Given path: " + argument_path)
-    print("💡 Byte size after operation: " + argument_path)
+    print("💡 Byte size after operation: " + size_after)
     print("💡 Before / After: " + str(size_before) + " / " + str(size_after))
     print("✔️ Script done.")
 
