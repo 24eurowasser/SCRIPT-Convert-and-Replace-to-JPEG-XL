@@ -217,7 +217,7 @@ def main() -> None:
 
     files:                     list[str] # 🦆 To be filled
     image_files:               list[str] # 🦆 To be filled
-    supported_file_extensions: list[str] = ["exr", "gif", "jpg", "jpeg", "pam", "pgm", "ppm", "pfm", "pgx", "png", "apng", "jxl"]
+    supported_file_extensions: list[str] = ["exr", "gif", "jpg", "jpeg", "pam", "pgm", "ppm", "pfm", "pgx", "png", "apng"]
 
     # Get the path from the second position of command line arguments
     argument_path = get_path(sys.argv)
