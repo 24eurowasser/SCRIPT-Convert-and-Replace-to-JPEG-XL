@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 
 def path_check(path: str) -> None:
@@ -205,18 +206,21 @@ def delete(file: str):
 
 def main() -> None:
     # Variables
-    argument_path:             str       # 🦆 To be filled
+    argument_path:             str       = "" # 🦆 To be filled
+    safe_path:                 str       = "" # 🦆 To be filled
+    safe_file:                 str       = "" # 🦆 To be filled
+    user_path:                 str       = os.environ['USERPROFILE']
 
-    size_before:               int       # 🦆 To be filled
-    size_after:                int       # 🦆 To be filled
-    number_of_files:           int       # 🦆 To be filled
-    number_of_image_files:     int       # 🦆 To be filled
-    current_progress:          int = 1
+    size_before:               int       = 0  # 🦆 To be filled
+    size_after:                int       = 0  # 🦆 To be filled
+    number_of_files:           int       = 0  # 🦆 To be filled
+    number_of_image_files:     int       = 0  # 🦆 To be filled
+    current_progress:          int       = 1
 
-    size_difference_mb:        float     # 🦆 To be filled
+    size_difference_mb:        float     = 0  # 🦆 To be filled
 
-    files:                     list[str] # 🦆 To be filled
-    image_files:               list[str] # 🦆 To be filled
+    files:                     list[str] = [] # 🦆 To be filled
+    image_files:               list[str] = [] # 🦆 To be filled
     supported_file_extensions: list[str] = ["exr", "gif", "jpg", "jpeg", "pam", "pgm", "ppm", "pfm", "pgx", "png", "apng"]
 
     # Get the path from the second position of command line arguments
@@ -238,11 +242,19 @@ def main() -> None:
 
     # Convert the images now
     for file in image_files:
+        # Move file to a safe path (emoji free symbols in path)
+        safe_file = os.path.join(user_path, os.path.basename(file)) # TODO variable aufnehmen
+        shutil.move(file, safe_file)
+        # Convert file
         print("💡 Convert image " + str(current_progress) + "/" + str(number_of_image_files) + " 🐸")
-        convert_image(file)
+        convert_image(safe_file)
         # Delete old image after conversion, only if JPEG XL file exist
-        if os.path.exists(file + ".jxl"):
-            delete(file)
+        if os.path.exists(safe_file + ".jxl"):
+            delete(safe_file)
+            # Move safe file to original directory
+            shutil.move(safe_file + ".jxl", os.path.join(os.path.dirname(file), os.path.basename(safe_file + ".jxl")))
+        else:
+            shutil.move(safe_file, file)
         print("✔️ Conversion done. 🐬")
         # Update progress
         current_progress = current_progress + 1
