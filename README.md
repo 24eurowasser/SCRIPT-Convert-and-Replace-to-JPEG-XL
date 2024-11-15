@@ -20,3 +20,5 @@ These settings are used for conversion:
 - Python 3.X
 - PATH installation of exiftool version from 10.07.2024 (🌍 Website to exiftool https://exiftool.org)
 - PATH installation of JPEG XL Reference Implementation v0.11.0 (🌍 Website to JPEG XL: https://github.com/libjxl/libjxl)
+- PATH installation of ImageMagick 7.1.1-39 (🌍 Website to ImageMagick: https://imagemagick.org)
+
