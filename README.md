@@ -22,3 +22,7 @@ These settings are used for conversion:
 - PATH installation of JPEG XL Reference Implementation v0.11.0 (🌍 Website to JPEG XL: https://github.com/libjxl/libjxl)
 - PATH installation of ImageMagick 7.1.1-39 (🌍 Website to ImageMagick: https://imagemagick.org)
 
+# License
+You are free to use and modify this script. However, please do not:
+- Use this code for commercial purposes.
+- Copy or modify this code without giving credit.
