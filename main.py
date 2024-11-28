@@ -175,6 +175,30 @@ def delete_file(file: str) -> None:
         print("🫵👁️👄👁️💢 This file could not be deleted: " + file)
 
 
+def find_specific_types(files: list[str], extensions: list[str]) -> list[str]:
+    """
+    Get a list of file paths that only include files with specific extensions.
+    :param files: A list of paths containing root and file extensions.
+    :param extensions: A list of extensions, without separation dot.
+    :return: Filtered list of paths with desired extensions.
+    """
+
+    # 📦 VARIABLES
+    result: list[str] = []
+
+    # ⚙️ LOGIC
+    for file in files:
+        for required_extension in extensions:
+            current_file_extension = os.path.splitext(file)[1].replace(".", "")
+            if required_extension == current_file_extension:
+                result.append(file)
+                continue
+            if required_extension.upper() == current_file_extension:
+                result.append(file)
+                continue
+    return result
+
+
 # 🟣 GETTER FUNCTIONS 📦
 def get_path(arguments: list[str]) -> str:
     """
@@ -226,30 +250,6 @@ def find_files(path: str) -> list[str]:
             current_file_path: str = os.path.join(root, file)
             # Add path to result
             result.append(current_file_path)
-    return result
-
-
-def find_specific_types(files: list[str], extensions: list[str]) -> list[str]:
-    """
-    Get a list of file paths that only include files with specific extensions.
-    :param files: A list of paths containing root and file extensions.
-    :param extensions: A list of extensions, without separation dot.
-    :return: Filtered list of paths with desired extensions.
-    """
-
-    # 📦 VARIABLES
-    result: list[str] = []
-
-    # ⚙️ LOGIC
-    for file in files:
-        for required_extension in extensions:
-            current_file_extension = os.path.splitext(file)[1].replace(".", "")
-            if required_extension == current_file_extension:
-                result.append(file)
-                continue
-            if required_extension.upper() == current_file_extension:
-                result.append(file)
-                continue
     return result
 
 
