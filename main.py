@@ -6,10 +6,14 @@ import sys
 
 # 🟣 PREDICATE FUNCTIONS ❓️
 def is_corrupt(input: str) -> bool:
-    """
-    Check if a provided image is corrupt or okay.
-    :param input: A path leading to an image file.
-    :return: Returns True if an image file is corrupted.
+    """ Check if a provided image is corrupt or not.
+
+    Args:
+        input: A path leading to an image file.
+
+    Returns:
+        True, if an image is corrupted.
+
     """
 
     # 📦 VARIABLES
@@ -26,10 +30,14 @@ def is_corrupt(input: str) -> bool:
 
 
 def is_supported_by_jpegxl(input: str) -> bool:
-    """
-    Check if a file contains a file extension that is supported by the official JPEG XL encoder.
-    :param input: A path leading to a file.
-    :return: True, if the file extension is supported.
+    """ Check if a file contains a file extension that is supported by the official JPEG XL encoder.
+
+    Args:
+        input: A path leading to a file.
+
+    Returns:
+        True, if the file extension is supported.
+
     """
 
     # 📦 VARIABLES
@@ -46,10 +54,14 @@ def is_supported_by_jpegxl(input: str) -> bool:
 
 # 🟣 HELPER FUNCTIONS ⚒️
 def check_path(path: str) -> None:
-    """
-    Check if a path exists.
-    :param path: A path to check.
-    :return: Stops the program if path doesn't exit.
+    """ Check if a path exists.
+
+    Args:
+        path: A path to check.
+
+    Returns:
+        Stops the program, if the path does not exit.
+
     """
 
     # 📦 VARIABLES
@@ -62,10 +74,14 @@ def check_path(path: str) -> None:
 
 
 def readable_bytes(num_of_bytes: int) -> str:
-    """
-    Converts a number of bytes into a human-readable string.
-    :param num_of_bytes: The number of bytes.
-    :return: A readable string representing the number of bytes.
+    """ Converts a number of bytes into a human-readable string.
+
+    Args:
+        num_of_bytes: The number of bytes
+
+    Returns:
+        A readable string representing the number of bytes.
+
     """
 
     # 📦 VARIABLES
@@ -80,10 +96,14 @@ def readable_bytes(num_of_bytes: int) -> str:
 
 
 def add_quotation(text: str) -> str:
-    """
-    Add quotation marks at the beginning and the end.
-    :param text: A string to add quotation marks.
-    :return: A string with quotation marks
+    """ Add quotation marks at the beginning and the end of a text.
+
+    Args:
+        text: A string to add quotation marks.
+
+    Returns:
+        A string with quotation marks.
+
     """
 
     # ⚙️ LOGIC
@@ -91,11 +111,15 @@ def add_quotation(text: str) -> str:
 
 
 def transfer_metadata(input: str, output: str) -> None:
-    """
-    Transfer every image metadata from input to output.
-    :param input: A path leading to a metadata-extractable file.
-    :param output: A path leading to a file that can receive metadata.
-    :return: None
+    """ Transfer every image metadata from input to output.
+
+    Args:
+        input: A path leading to a metadata-extractable file.
+        output: A path leading to a file that can receive metadata.
+
+    Returns:
+        None.
+
     """
 
     # 📦 VARIABLES
@@ -111,11 +135,15 @@ def transfer_metadata(input: str, output: str) -> None:
     subprocess.run(command, capture_output=True, check=True)  # Capture output to keep console messages clean.
 
 
-def add_title(input: str) -> None:
-    """
-    Add title tag in image exif metadata, based on the current file name.
-    :param input: A path leading to an image.
-    :return: None
+def add_exif_title(input: str) -> None:
+    """ Add title tag in image EXIF metadata, based on the current file name.
+
+    Args:
+        input: A path leading to an image.
+
+    Returns:
+        None.
+
     """
 
     # 📦 VARIABLES
@@ -131,10 +159,14 @@ def add_title(input: str) -> None:
 
 
 def restore_filetype(input: str) -> str:
-    """
-    Restore proper file extension naming, using Exiftool
-    :param input: A path to a directory to correct
-    :return: A path to the newly renamed file
+    """ Restore proper file extension naming.
+
+    Args:
+        input: A path leading to an image.
+
+    Returns:
+        A path to the newly renamed file.
+
     """
 
     # 📦 VARIABLES
@@ -162,10 +194,14 @@ def restore_filetype(input: str) -> str:
 
 
 def delete_file(file: str) -> None:
-    """
-    Try to delete a file.
-    :param file: A path to a file to delete.
-    :return: None
+    """ Delete a file.
+
+    Args:
+        file: A path to a file to delete.
+
+    Returns:
+        None.
+
     """
 
     # ⚙️ LOGIC
@@ -176,11 +212,15 @@ def delete_file(file: str) -> None:
 
 
 def find_specific_types(files: list[str], extensions: list[str]) -> list[str]:
-    """
-    Get a list of file paths that only include files with specific extensions.
-    :param files: A list of paths containing root and file extensions.
-    :param extensions: A list of extensions, without separation dot.
-    :return: Filtered list of paths with desired extensions.
+    """ Get a list of file paths that only include files with specific extensions.
+
+    Args:
+        files: A list of file paths.
+        extensions: A list of extensions, without the separation dot.
+
+    Returns:
+        Filtered list of paths with desired extensions.
+
     """
 
     # 📦 VARIABLES
@@ -201,10 +241,14 @@ def find_specific_types(files: list[str], extensions: list[str]) -> list[str]:
 
 # 🟣 GETTER FUNCTIONS 📦
 def get_path(arguments: list[str]) -> str:
-    """
-    Get the path from the first argument, if possible.
-    :param arguments: Should be the command line arguments.
-    :return: A path.
+    """ Get a path from the first command line argument.
+
+    Args:
+        arguments: The command line arguments.
+
+    Returns:
+        A path.
+
     """
 
     # ⚙️ LOGIC
@@ -220,10 +264,14 @@ def get_path(arguments: list[str]) -> str:
 
 
 def get_size(path: str) -> int:
-    """
-    Get the size of a directory.
-    :param path: A path to a file.
-    :return: Size in byte.
+    """ Get the byte size of a file.
+
+    Args:
+        path: A path to a file.
+
+    Returns:
+        Byte size of a file.
+
     """
 
     # ⚙️ LOGIC
@@ -232,10 +280,14 @@ def get_size(path: str) -> int:
 
 
 def find_files(path: str) -> list[str]:
-    """
-    Scans a directory recursively and creates a list of paths that include name and root
-    :param path: A path to a directory.
-    :return: A string list of paths.
+    """ Get a list of file paths recursively, based from a directory.
+
+    Args:
+        path: A path to a directory.
+
+    Returns:
+        A string list of paths.
+
     """
 
     # 📦 VARIABLES
@@ -255,10 +307,14 @@ def find_files(path: str) -> list[str]:
 
 # 🟣 CONVERTER FUNCTIONS 🔄️
 def convert_to_jpegxl(input: str) -> str:
-    """
-    Converts the input as JPEG XL file format to the output path.
-    :param input: A path to an image to be converted.
-    :return: An output path for the converted file.
+    """ Converts the input as JPEG XL file.
+
+    Args:
+        input: A path to an image to be converted.
+
+    Returns:
+        An output path for the converted file.
+
     """
 
     # 📦 VARIABLES
@@ -277,7 +333,7 @@ def convert_to_jpegxl(input: str) -> str:
         # Transfer metadata
         transfer_metadata(input, output)
         # Set the exif title to current file name
-        add_title(output)
+        add_exif_title(output)
         # Delete old input
         delete_file(input)
 
@@ -285,11 +341,16 @@ def convert_to_jpegxl(input: str) -> str:
 
 
 def convert_to_png(input: str) -> str:
+    """ Converts the input as PNG file.
+
+    Args:
+        input: A path to an image to be converted.
+
+    Returns:
+        An output path for the converted file.
+
     """
-    Converts the input as PNG file format to the output path.
-    :param input: A path to an image to be converted.
-    :return: Output path to the converted PNG
-    """
+
     # 📦 VARIABLES
     # Make paths safe to use for console use (spaces in paths can create problems)
     quoted_input: str = add_quotation(input)
@@ -308,11 +369,16 @@ def convert_to_png(input: str) -> str:
 
 
 def recover_image(input: str) -> str:
+    """ Try to recover a corrupt image.
+
+    Args:
+        input: A path to an image to be recovered.
+
+    Returns:
+        Output path to the recovered image.
+
     """
-    Converts the image again, based on the original filetype.
-    :param input: A path to an image to be recovered.
-    :return: Output path to the recovered image
-    """
+
     # 📦 VARIABLES
     # Make paths safe to use for console use (spaces in paths can create problems)
     output: str = input + os.path.splitext(input)[1]
@@ -331,11 +397,15 @@ def recover_image(input: str) -> str:
     return output
 
 
-def convert_image(files: list[str]) -> None:
-    """
-    Convert an image as JPEG XL and preserve exif metadata.
-    :param files: A list of paths leading to files.
-    :return: None
+def convert_images(files: list[str]) -> None:
+    """ Converts images as JPEG XL with previous EXIF metadata.
+
+    Args:
+        files: A list of paths leading to images.
+
+    Returns:
+        None.
+
     """
 
     # 📦 VARIABLES
@@ -415,6 +485,10 @@ def convert_image(files: list[str]) -> None:
 
 # 🟣 MAIN
 def main() -> None:
+    """
+    A function to start the script.
+    :return: None.
+    """
 
     # 📦 VARIABLES
     argument_path: str = "" # Path that was parsed from console
@@ -444,7 +518,7 @@ def main() -> None:
     print("Directory size: " + size_before)
 
     # Convert the images now
-    convert_image(image_files)
+    convert_images(image_files)
 
     # Get size after conversion
     files = find_files(argument_path)
