@@ -161,7 +161,7 @@ def restore_filetype(input: str) -> str:
     return new_path
 
 
-def delete_file(file: str):
+def delete_file(file: str) -> None:
     """
     Try to delete a file.
     :param file: A path to a file to delete.
