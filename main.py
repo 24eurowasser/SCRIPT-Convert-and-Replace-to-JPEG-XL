@@ -1,7 +1,11 @@
+import curses
+import time
+from curses import wrapper
 import os
 import shutil
 import subprocess
 import sys
+
 
 
 # 🟣 PREDICATE FUNCTIONS ❓️
@@ -53,11 +57,12 @@ def is_supported_by_jpegxl(input: str) -> bool:
 
 
 # 🟣 HELPER FUNCTIONS ⚒️
-def check_path(path: str) -> None:
+def check_path(path: str, stdscr) -> None:
     """ Check if a path exists.
 
     Args:
         path: A path to check.
+        stdscr: An object for managing the console output.
 
     Returns:
         Stops the program, if the path does not exit.
@@ -69,7 +74,9 @@ def check_path(path: str) -> None:
 
     # ⚙️ LOGIC
     if path_exists is False:
-        print("🫵👁️👄👁️💢 This path doesn't exit: " + path)
+        stdscr.addstr(7, 0, "🫵👁️👄👁️💢 This path doesn't exit: " + path)
+        stdscr.refresh()
+        # TODO throw an exception
         sys.exit(1)
 
 
@@ -193,11 +200,12 @@ def restore_filetype(input: str) -> str:
     return new_path
 
 
-def delete_file(file: str) -> None:
+def delete_file(file: str, stdscr) -> None:
     """ Delete a file.
 
     Args:
         file: A path to a file to delete.
+        stdscr: An object for managing the console output.
 
     Returns:
         None.
@@ -208,7 +216,8 @@ def delete_file(file: str) -> None:
     try:
         os.remove(file)
     except OSError as error:
-        print("🫵👁️👄👁️💢 This file could not be deleted: " + file)
+        stdscr.addstr(7, 0, "🫵👁️👄👁️💢 This file could not be deleted: " + file)
+        stdscr.refresh()
 
 
 def find_specific_types(files: list[str], extensions: list[str]) -> list[str]:
@@ -254,6 +263,7 @@ def get_path(arguments: list[str]) -> str:
     # ⚙️ LOGIC
     # No extra argument are given
     if len(arguments) < 2:
+        # TODO
         print("🫵👁️👄👁️💢 Command line argument is missing.")
         print("🫵👁️👄👁️💢 Please add an argument containing a path to your media directory.")
         sys.exit(1)
@@ -397,11 +407,12 @@ def recover_image(input: str) -> str:
     return output
 
 
-def convert_images(files: list[str]) -> None:
+def convert_images(files: list[str], stdscr) -> None:
     """ Converts images as JPEG XL with previous EXIF metadata.
 
     Args:
         files: A list of paths leading to images.
+        stdscr: An object for managing the console output.
 
     Returns:
         None.
@@ -440,18 +451,22 @@ def convert_images(files: list[str]) -> None:
         old_size = get_size(current_file)
 
         # Inform user
-        print("📢 Current file: " + file)
+        stdscr.addstr(4, 0, "📢 Current file: " + file)
+        stdscr.refresh()
 
         # Handle corrupted files
         if is_corrupt(current_file):
-            print("This file is corrupted: " + current_file)
-            print("Try to recover image.")
+            stdscr.addstr(7, 0, "This file is corrupted: " + current_file)
+            stdscr.addstr(8, 0, "Try to recover image.")
+            stdscr.refresh()
             try:
                 # Update current_file
                 current_file = recover_image(current_file)
-                print("Recovery successful.")
+                stdscr.addstr(9, 0, "Recovery successful.")
+                stdscr.refresh()
             except Exception:
-                print("🫵👁️👄👁️💢 Recovery failed. File will be skipped.")
+                stdscr.addstr(9, 0, "🫵👁️👄👁️💢 Recovery failed. File will be skipped.")
+                stdscr.refresh()
                 continue
 
         # Restore actual file extension (even after recovery) and update current_image
@@ -474,8 +489,9 @@ def convert_images(files: list[str]) -> None:
         else:
             indicator = "📈 (Size is bigger than before.)"
 
-        print("📢 Current space savings in total: " + readable_bytes(current_space_gains) + " " + indicator)
-        print("✔️ Convert image " + str(current_progress) + "/" + str(len(files)) + " 🐸 ")
+        stdscr.addstr(5, 0, "📢 Current space savings in total: " + readable_bytes(current_space_gains) + " " + indicator)
+        stdscr.addstr(6, 0, "✔️ Convert image " + str(current_progress) + "/" + str(len(files)) + " 🐸 ")
+        stdscr.refresh()
 
         # Revert file relocating
         shutil.move(current_file, os.path.join(original_path, os.path.basename(current_file)))
@@ -484,10 +500,15 @@ def convert_images(files: list[str]) -> None:
         current_progress += 1
 
 # 🟣 MAIN
-def main() -> None:
-    """
-    A function to start the script.
-    :return: None.
+def main(stdscr) -> None:
+    """ A function to start the script.
+
+    Args:
+        stdscr: An object for managing the console output.
+
+    Returns:
+        None.
+
     """
 
     # 📦 VARIABLES
@@ -498,9 +519,11 @@ def main() -> None:
     files: list[str] = [] # A list of files
     image_files: list[str] = [] # A list of image files
     image_extensions: list[str] = ["jpg", "jpeg", "png", "gif", "apng", "tiff", "tif", "heic", "JP2", "webp",
-                                   "exr", "pam", "pgm", "ppm", "pfm", "pgx"]
+                                   "exr", "pam", "pgm", "ppm", "pfm", "pgx", "jxl"]
 
     # ⚙️ LOGIC
+    # Clear console text
+    stdscr.clear()
     # Get the path from the second position of command line arguments
     argument_path = get_path(sys.argv)
     # Scan every file path from the given path
@@ -512,13 +535,14 @@ def main() -> None:
         temp += get_size(file)
         size_before = readable_bytes(temp)
     # Let the user know the current status
-    print("📢 Given path: " + argument_path)
-    print("Total files: " + str(len(files)))
-    print("Supported image files: " + str(len(image_files)))
-    print("Directory size: " + size_before)
+    stdscr.addstr(0, 0, "📢 Given path: " + argument_path)
+    stdscr.addstr(1, 0, "Total files: " + str(len(files)))
+    stdscr.addstr(2, 0, "Supported image files: " + str(len(image_files)))
+    stdscr.addstr(3, 0, "Directory size: " + size_before)
+    stdscr.refresh()
 
     # Convert the images now
-    convert_images(image_files)
+    convert_images(image_files, stdscr)
 
     # Get size after conversion
     files = find_files(argument_path)
@@ -528,10 +552,14 @@ def main() -> None:
         size_after = readable_bytes(temp)
 
     # End status report
-    print("📢 Size information:")
-    print("Before and after size of the directory: " + size_before + " / " + size_after)
-    print("✔️✔️✔️ Script done! 🦭🐳")
+    stdscr.addstr(7, 0, "📢 Size information:")
+    stdscr.addstr(8, 0, "Before and after size of the directory: " + size_before + " / " + size_after)
+    stdscr.addstr(9, 0, "✔️✔️✔️ Script done! 🦭🐳")
+    stdscr.refresh()
+    time.sleep(5)
 
 
 # 🐸 Start the script 🦭
-main()
+wrapper(main)
+
+# TODO find out what type of object 'stdscr' is
