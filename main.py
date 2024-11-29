@@ -542,8 +542,9 @@ def convert_images(files: list[str], stdscr) -> None:
         old_size = get_size(current_file, stdscr)
 
         # Inform user
-        stdscr.addstr(4, 0, "") # Reset current line
-        stdscr.addstr(4, 0, "📢 Current file: " + file + get_many_spaces(10))
+        stdscr.addstr(4, 0, get_many_spaces(30)) # Reset current line
+        stdscr.refresh()
+        stdscr.addstr(4, 0, "📢 Current file: " + file)
         stdscr.refresh()
 
         # Handle corrupted files
@@ -581,7 +582,8 @@ def convert_images(files: list[str], stdscr) -> None:
         else:
             indicator = "📈 (Size is bigger than before.)"
 
-        stdscr.addstr(5, 0, "") # Reset current line
+        stdscr.addstr(5, 0, get_many_spaces(30)) # Reset current line
+        stdscr.refresh()
         stdscr.addstr(5, 0, "📢 Current space savings in total: " + readable_bytes(current_space_gains) + " " + indicator + get_many_spaces(8))
         stdscr.addstr(6, 0, "✔️ Convert image " + str(current_progress) + "/" + str(len(files)) + " 🐸 " + get_many_spaces(10))
         stdscr.refresh()
