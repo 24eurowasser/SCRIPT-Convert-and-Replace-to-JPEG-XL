@@ -98,8 +98,8 @@ def readable_bytes(num_of_bytes: int) -> str:
     # ⚙️ LOGIC
     for unit in units:
         if abs(num_of_bytes) < 1024.0:
-            # %3.1f specifies a float number with a width of 3 characters and 1 decimal place
-            return "%3.1f %s" % (num_of_bytes, unit)
+            # %3.2f specifies a float number with a width of 3 characters and 2 decimal place
+            return "%3.2f %s" % (num_of_bytes, unit)
         num_of_bytes /= 1024.0
 
 
@@ -543,7 +543,7 @@ def convert_images(files: list[str], stdscr) -> None:
 
         # Inform user
         stdscr.addstr(4, 0, "") # Reset current line
-        stdscr.addstr(4, 0, "📢 Current file: " + file)
+        stdscr.addstr(4, 0, "📢 Current file: " + file + get_many_spaces(10))
         stdscr.refresh()
 
         # Handle corrupted files
@@ -582,7 +582,7 @@ def convert_images(files: list[str], stdscr) -> None:
             indicator = "📈 (Size is bigger than before.)"
 
         stdscr.addstr(5, 0, "") # Reset current line
-        stdscr.addstr(5, 0, "📢 Current space savings in total: " + readable_bytes(current_space_gains) + " " + indicator)
+        stdscr.addstr(5, 0, "📢 Current space savings in total: " + readable_bytes(current_space_gains) + " " + indicator + get_many_spaces(8))
         stdscr.addstr(6, 0, "✔️ Convert image " + str(current_progress) + "/" + str(len(files)) + " 🐸 " + get_many_spaces(10))
         stdscr.refresh()
 
